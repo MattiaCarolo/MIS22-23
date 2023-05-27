@@ -27,11 +27,6 @@
 #define magnet_sx 11
 #define magnet_dx 12
 
-//reboot teensy at the end of a test
-#define RESTART_ADDR       0xE000ED0C
-#define READ_RESTART()     (*(volatile uint32_t *)RESTART_ADDR)
-#define WRITE_RESTART(val) ((*(volatile uint32_t *)RESTART_ADDR) = (val))
-
 // Indicate in which state of the state machine the program is and if we are already in a test loop
 int program_execution_state = 0;
 bool execution = LOW; //can be removed? seems not to be used
@@ -46,8 +41,6 @@ bool test_ready_state = LOW;
 bool stimulus_sx = LOW;
 bool stimulus_dx = LOW;
 
-// Variable received to select which stimuli to use in the test
-//int stimuli_type = 4; // arrive from python
 // Variables that indicate if a stimulus have to be activated or not
 bool visual_stimuli = LOW;
 bool noaudio_stimuli = LOW;
@@ -72,8 +65,6 @@ bool last_reset_button_state = LOW;
 unsigned long last_debounce_time_reset = 0; 
 
 // Variables for the state of the leds that show us the execution state of the program
-//volatile byte led_start_state = HIGH; //can remove volatile?
-//volatile byte led_stop_state = HIGH;
 bool led_start_state = HIGH;
 bool led_stop_state = HIGH;
 
@@ -166,16 +157,14 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-  
-  //Serial.println("Select stimuli");
-  // select which stimuli to use for this test
-  //select_stimuli(stimuli_type, visual_stimuli, auditory_stimuli, tactile_stimuli);
 }
 
 void loop() {
   // read if hands are in the correct position
   hand_in_position_state_sx = digitalRead(hand_in_position_sx);
   hand_in_position_state_dx = digitalRead(hand_in_position_dx);
+
+  //read serial com
   if (Serial.available() > 0){
     received_buffer = Serial.readStringUntil('\n');
     Serial.println(received_buffer);
@@ -184,8 +173,7 @@ void loop() {
   int str_len = received_buffer.length() + 1; 
   char received_buffer_char[str_len];
   received_buffer.toCharArray(received_buffer_char, str_len);
-  if(str_len >= 2){ // 4 is an arbitrary number
-    //Serial.println(received_buffer_char); // Print for debugging reasons
+  if(str_len >= 2){ 
     parseCom(received_buffer_char);
     
     Serial.flush();
@@ -230,15 +218,10 @@ void loop() {
                   test_time_ready = millis();
                   randomSeed(millis());
                   rand_time = random(5000, 10000);
-                  if (tactile_stimuli == HIGH){
-                    test_type = 1;
-                  }else{
-                    test_type = random(0, 2);
-                  }
+                  test_type = random(0, 2);
                   switch(test_type){
                       case(0): ongoing_test_sx = HIGH; break;
                       case(1): ongoing_test_dx = HIGH; break;
-                      //case(2): ongoing_test_sx = HIGH; ongoing_test_dx = HIGH; break;
                       default: ongoing_test_sx = LOW; ongoing_test_dx = LOW;
                     }
                   // test is starteded
@@ -278,25 +261,18 @@ void loop() {
                 if ((millis() - test_time_ready) >= rand_time){
                   switch(test_type){
                     case(0): stimulus_sx = HIGH; 
-                             //glove_state_sx = LOW;
                              break;
                     case(1): stimulus_dx = HIGH; 
-                             //glove_state_dx = LOW;
                              break;
                     case(2): stimulus_sx = HIGH;
                              stimulus_dx = HIGH;  
-                             //glove_state_sx = LOW;
-                             //glove_state_dx = LOW;
                              break;
                     default: stimulus_sx = LOW;
                              stimulus_dx = LOW;  
-                             //glove_state_sx = HIGH;
-                             //glove_state_dx = HIGH;
                              break;
                   }
                   program_execution_state = 3;
                   test_time_start = millis();
-                  //led_start_state = HIGH;
                 }
 
                 read_reset_button(reset_button_reading, 
@@ -316,26 +292,18 @@ void loop() {
       
                 if ((millis() - test_time_start) >= detachment_time){
                   switch(test_type){
-                    case(0): //stimulus_sx = HIGH; 
-                             glove_state_sx = LOW;
+                    case(0): glove_state_sx = LOW;
                              break;
-                    case(1): //stimulus_dx = HIGH; 
+                    case(1): glove_state_dx = LOW;
+                             break;
+                    case(2): glove_state_sx = LOW;
                              glove_state_dx = LOW;
                              break;
-                    case(2): //stimulus_sx = HIGH;
-                             //stimulus_dx = HIGH;  
-                             glove_state_sx = LOW;
-                             glove_state_dx = LOW;
-                             break;
-                    default: //stimulus_sx = LOW;
-                             //stimulus_dx = LOW;  
-                             glove_state_sx = HIGH;
+                    default: glove_state_sx = HIGH;
                              glove_state_dx = HIGH;
                              break;
                   }
                   program_execution_state = 4;
-                  //test_time_start = millis();
-                  //led_start_state = HIGH;
                 }
                 read_reset_button(reset_button_reading, 
                                   reset_button_state, 
@@ -343,10 +311,6 @@ void loop() {
                                   last_debounce_time_reset,
                                   debounce_delay,
                                   program_execution_state);
-
-                //if (received_buffer_char[0] == 'R'){ //non ha senso fare lo stesso controllo che viene poi fatto dentro la funzione
-                //reset_from_server(received_buffer_char, program_execution_state); 
-                //} 
                 break;
       
       // see if the user chatches all the balls and turn off the stimuli if it chatches or enough tie is last
@@ -357,12 +321,6 @@ void loop() {
 
                 // turn off stimuli if enought time is last than go to next state
                 if ((millis() - test_time_start) >= stimuly_duration){
-                //  switch(test_type){
-                //    case(0): stimulus_sx = LOW; break;
-                //    case(1): stimulus_dx = LOW; break;
-                //    case(2): stimulus_sx = LOW; stimulus_dx = LOW; break;
-                //    default: stimulus_sx = LOW; stimulus_dx = LOW;
-                // }
                   stimulus_sx = LOW;
                   stimulus_dx = LOW;
                   program_execution_state = 5;  
@@ -443,9 +401,8 @@ void loop() {
                 if (show_results){
                   delay(300);
                   Serial.println("HAP sx:" + String(test_elapsed_time_sx) + "|dx:"+ String(test_elapsed_time_dx));
-                  //WRITE_RESTART(0x5FA0004);
                   show_results = false;
-                  program_execution_state = -1; //better to use this again
+                  program_execution_state = -1; 
                 }
 
                 read_reset_button(reset_button_reading, 
@@ -499,7 +456,6 @@ void loop() {
                 program_execution_state = 2;
                 break;
 
-// reset for when hands not in position
       case(9):  if(first9){
                   Serial.println("State 9");
                   first9 = false;
@@ -508,9 +464,8 @@ void loop() {
                 if (show_results){
                   delay(300);
                   Serial.println("RES sx:" + String(result_sx) + "|dx:"+ String(result_dx));
-                  //WRITE_RESTART(0x5FA0004);
                   show_results = false;
-                  program_execution_state = -1; //better to use this again
+                  program_execution_state = -1; 
                 }
 
       // reset state that reset everything
@@ -522,8 +477,8 @@ void loop() {
                 glove_state_sx = HIGH;
                 glove_state_dx = HIGH;
 
-                led_start_state = HIGH; //LOW;
-                led_stop_state = HIGH; //LOW;
+                led_start_state = HIGH; 
+                led_stop_state = HIGH; 
                 test_ready_state = LOW;
 
                 show_results = HIGH;
