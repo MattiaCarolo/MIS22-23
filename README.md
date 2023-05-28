@@ -11,10 +11,12 @@ Noemi Canovi; Mattia Carolo; Laura Corso; Roberto Mazzaro.
 As part of Multisensory Interactive Systems course, run by prof. Turchet in University of Trento, an
 interactive system involving three of the main senses (vision, touch and hearing), has been developed
 and tested.
+
 It represents an opportunity for sportsmen and others to sharpen their reaction time and improve their
 hand-eye coordination. Indeed, it is an automatic training tool in which tennis balls fall from a platform
 and the user has to catch them before they touch the ground. To aid the reaction response, numerous
 cues are presented before the fall, such as vibrations, sounds and lights.
+
 In addition, the timing between the start of the fall and the catch of the user is stored and sent to a
 website in order to provide a tool for the monitoring of the training.
 
