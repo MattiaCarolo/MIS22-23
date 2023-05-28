@@ -49,7 +49,7 @@ def add(x, y):
 def command_task(self,command,user):
     serialcom = connect()
     side = ""
-    print("la stringa arrivata e " + command)
+    print("Received command is : " + command)
     if('<V,A,T>' in command):
         print("Starting all test")
         side = test_VAT(serialcom)
@@ -91,7 +91,7 @@ def command_task(self,command,user):
         if(not 'AUD' in st):
             print(st)
         if("eta" in st):
-            print("palla staccara")
+            print("Ball detached")
             eject_flag = True
             self.update_state(state='EJECTED',
                           meta={'current': Ntest, 'total': 8,

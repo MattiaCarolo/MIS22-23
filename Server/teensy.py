@@ -10,9 +10,6 @@ teensyports = [
     ]
 print(teensyports)
 teensy_name = "USB"
-#serialcom = serial.Serial('COM5',115200)
-#serialcom.timeout = 1
-#serialcom = serial.serial_for_url('rfc2217://localhost:4000',\
 
 #f = float B = unsigned Char (uint8_t equivalent)
 
@@ -20,16 +17,17 @@ def disconnect(serialcom):
 	serialcom.close()
 
 def connect():
-    print("mi sto connettendo")
+    print("Establishing Connection..")
     ports = list(serial.tools.list_ports.comports())
     for p in ports:
         if teensy_name in p.description:
             teensy_port = p.device
             ser = serial.Serial(teensy_port, 115200)
+    print("Connection established")
     return ser
 
 def pdSignal(serialcom, flag):
-    print("sto entrando nel wait della teensy")
+    print("Waiting for Teensy")
     client = udp_client.SimpleUDPClient("127.0.0.1", 5005)
     while True:
         try:
@@ -51,9 +49,6 @@ def pdSignal(serialcom, flag):
                 return "dx"
             elif('NOT' in msg): 
                 print(msg + " in pure data")
-                return "xx"
-                print(msg + " in pure data")
-                client.send_message("/x_state", 10)
                 return "xx"
         except:
             return "Error with pure data"
