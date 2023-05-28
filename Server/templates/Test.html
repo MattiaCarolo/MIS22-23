@@ -75,7 +75,6 @@
                             readVal = 2
                         },
                         complete: function (data) {
-                            //readVal = 1
                             log("changed readval on complete");
                         }
                     });
@@ -95,7 +94,6 @@
                     error: function(request, status, error) {
                     },
                     complete: function (data) {
-                        //readVal = 1
                         log("changed readval on complete");
                     }
                 });
@@ -185,9 +183,6 @@
             */
 
             function draw() {
-                // Fake communication set up
-                // TO DO: add real communication
-
                 // Handling of the states of the program. The program has four states:
                 // 0: initial state of the progam. Here a communication is waited
                 //    and once it comes the program is diverted in a different state according with the received signal.
@@ -238,7 +233,7 @@
                                 status = 0;
                                 winStarted = false;
                                 winFinished = false;
-                                readVal = 4;    // TO DO: remove after inserting true communication
+                                readVal = 4;
                             }
                             break;
 
@@ -257,7 +252,7 @@
                                 lossStarted = false;
                                 lossFinished = false;
                                 init = false;
-                                readVal = 4;    // TO DO: remove after inserting true communication
+                                readVal = 4;
                             }
                             break;
                 }
