@@ -13,6 +13,15 @@ Mattia Carolo
 
 The scope of this project is to analyze reflex phenomena through the implementation of a multisensory interactive system. To achieve this the project must be paired with his physical counterpart.
 
+## Structure
+
+The codebase is divided in folders where:
+
+- Server folder will contain both the FrontEnd and BackEnd of our project.
+- PureData will have inside the various patches that will be used during the execution
+- TeensyCode will have the source code already uploaded to the teensyy
+- Stats will contain all the scripts to analyze the results obtained during all the experiments 
+
 ### Can You run it
 
 In order to run the project you need:
