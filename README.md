@@ -20,7 +20,7 @@ cues are presented before the fall, such as vibrations, sounds and lights.
 In addition, the timing between the start of the fall and the catch of the user is stored and sent to a
 website in order to provide a tool for the monitoring of the training.
 
-To complete the project, this code must be paired with its physical counterpart.
+Note: to complete the project, this code must be paired with its physical counterpart.
 
 ## Structure
 
