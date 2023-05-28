@@ -62,8 +62,6 @@
                     error: function(request, status, error) {
                     },
                     complete: function (data) {
-                        //readVal = 1
-
                         log("changed readval on complete");
                     }
                 });
@@ -87,7 +85,6 @@
                             stri = data['status']
                             //var dic_str = stri.replace(/'/g, "\"");
                             //var dic = JSON.parse(stri);
-                            //la call alla presa riuscita funziona
                             //console.log('Resulting value: ' + dic['timer1']);
                             //console.log('Resulting value: ' + dic['timer2']);
                             text_timesx = data['timer1']
@@ -153,9 +150,6 @@
             Draw function runned repeatedly.
             */
             function draw() {
-                // Fake communication set up
-                // TO DO: add real communicatio
-
                 // Handling of the states of the program. The program has four states:
                 // 0: initial state of the progam. Here a communication is waited
                 //    and once it comes the program is diverted in a different state according with the received signal.
@@ -206,7 +200,7 @@
                                 status = 0;
                                 winStarted = false;
                                 winFinished = false;
-                                readVal = 4;    // TO DO: remove after inserting true communication
+                                readVal = 4; 
                             }
                             break;
 
@@ -225,7 +219,7 @@
                                 lossStarted = false;
                                 lossFinished = false;
                                 init = false;
-                                readVal = 4;    // TO DO: remove after inserting true communication
+                                readVal = 4;
                             }
                             break;
                 }
