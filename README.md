@@ -13,11 +13,13 @@ Mattia Carolo
 
 The scope of this project is to analyze reflex phenomena through the implementation of a multisensory interactive system. To achieve this the project must be paired with his physical counterpart.
 
-In order for the project to work
-
 ### Can You run it
 
-In order 
+In order to run the project you need:
+
+- A Raspberry Pi 4 (check at the beginning if numpy is supported)
+- A Teensy board (we used the 3.6 version however all 3.X version should be supported)
+- Custom Hardware (check the related [paper](MultisensoryReport.pdf))
 
 ### How To Start
 
