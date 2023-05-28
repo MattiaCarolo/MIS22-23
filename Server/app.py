@@ -573,28 +573,16 @@ def taskstatus(task_id):
         }
     return jsonify(response)
 
-#TODO: fare funzione che scrive nel file csv i risultati delle prove con gli stimoli. Un file per utente
-
 def resultsFillSuccess(data):
     if 'results.csv' in os.listdir('database'):
-        # create a dictionary with the informations
-        #new_data = {'catch': 1, 'reactionTime': [form_data["rt"]], 'Visual': [form_data["visual"]], 'Audio': [form_data["aptic"]], 'Tactile': [form_data["tactile"]], 'Date': [str(datetime.date.today())], 'us': [session['name']]}
-
-        # convert the dictionary to dataframe
         print(data)
-        #myFile = open('database/results.csv', 'r+')
-        #writer = csv.writer(myFile)
+        # convert the dictionary to dataframe
         new_data = pd.DataFrame.from_dict(data)
-        #writer.writerow(data.values())
-        #myFile.close()
 
         # save in csv
         new_data.to_csv('database/results.csv', sep = ';', mode = 'a', index = False, header = False)
     
     else:
-        # create a dictionary with the informations
-        #new_data = {'catch': [form_data["catch"]], 'reactionTime': [form_data["rt"]], 'Visual': [form_data["visual"]], 'Audio': [form_data["aptic"]], 'Tactile': [form_data["tactile"]], 'Date': [str(datetime.date.today())], 'us': [session['name']]}
-
         # convert the dictionary to dataframe
         new_data = pd.DataFrame.from_dict(data)
 
@@ -603,8 +591,6 @@ def resultsFillSuccess(data):
 
 def resultsFillFailure(data):
     if 'results.csv' in os.listdir('database'):
-        # create a dictionary with the informations
-        #new_data = {'catch': [form_data["catch"]], 'reactionTime': [form_data["rt"]], 'Visual': [form_data["visual"]], 'Audio': [form_data["aptic"]], 'Tactile': [form_data["tactile"]], 'Date': [str(datetime.date.today())], 'us': [session['name']]}
         # convert the dictionary to dataframe
         new_data = pd.DataFrame.from_dict(data)
 
@@ -612,8 +598,6 @@ def resultsFillFailure(data):
         new_data.to_csv('database/results.csv', sep = ';', mode = 'a', index = False, header = False)
     
     else:
-        # create a dictionary with the informations
-        #new_data = {'catch': [form_data["catch"]], 'reactionTime': [form_data["rt"]], 'Visual': [form_data["visual"]], 'Audio': [form_data["aptic"]], 'Tactile': [form_data["tactile"]], 'Date': [str(datetime.date.today())], 'us': [session['name']]}
         # convert the dictionary to dataframe
         new_data = pd.DataFrame.from_dict(data)
 
