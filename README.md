@@ -35,7 +35,7 @@ In order to run the project you need:
 P.S. Remember that each time a component prompts for a password it is 
 MIS@DISI
 
->> Windows
+>> Windows & Linux
 
 1) access through terminal to the PI (it should be connected to the local network) with SSH
 2) Once inside launch the server with the command 'vncserver'. It should build the address at the same IP with the port 1
